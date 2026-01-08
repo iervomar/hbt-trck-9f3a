@@ -149,17 +149,23 @@ function renderEditMode(db, app) {
     row.className = "edit-row";
 
     row.innerHTML = `
-      <span>${habit.name}</span>
+      <input class="name-input" type="text" value="${habit.name}" />
       <input type="number" min="1" value="${habit.target}" />
       <button>↑</button>
       <button>↓</button>
       <button>🗑</button>
     `;
 
-    const [input, up, down, del] = row.querySelectorAll("input, button");
+    const [nameInput, targetInput, up, down, del] = row.querySelectorAll("input, button");
 
-    input.onchange = () => {
-      habit.target = +input.value;
+    nameInput.onchange = () => {
+      habit.name = nameInput.value;
+      saveDB(db);
+      render();
+    };
+
+    targetInput.onchange = () => {
+      habit.target = +targetInput.value;
       saveDB(db);
       render();
     };
@@ -186,7 +192,7 @@ function renderEditMode(db, app) {
 
     del.onclick = () => {
       if (!confirm("Delete habit? Past data will be kept.")) return;
-      db.habits = db.habits.filter(h => h.id !== habit.id);
+      db.habits.splice(index, 1);
       saveDB(db);
       render();
     };
