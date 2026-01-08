@@ -204,14 +204,24 @@ function renderEditMode(db, app) {
   addBtn.textContent = "+ Add habit";
   addBtn.className = "add-btn";
   addBtn.onclick = () => {
-    db.habits.push({
+    const newHabit = {
       id: "h" + Date.now(),
       name: "New habit",
       target: 1
-    });
+    };
+    db.habits.push(newHabit);
     saveDB(db);
     render();
+    // Focus the input of the last habit
+    setTimeout(() => {
+      const inputs = document.querySelectorAll(".name-input");
+      if (inputs.length) {
+        inputs[inputs.length - 1].focus();
+        inputs[inputs.length - 1].select();
+      }
+    }, 50);
   };
+
 
   app.appendChild(addBtn);
 }
