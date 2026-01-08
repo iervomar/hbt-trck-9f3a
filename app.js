@@ -15,13 +15,36 @@ function getWeekNumber(d = new Date()) {
 const currentWeek = getWeekNumber();
 const lastWeek = currentWeek - 1;
 
-document.getElementById("week").textContent = currentWeek;
+document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("week").textContent = currentWeek;
+  render();
+});
 
 /* ------------------ DB ------------------ */
 
 function loadDB() {
   const raw = localStorage.getItem(STORAGE_KEY);
-  if (raw) return JSON.parse(raw);
+  if (raw) {
+    try {
+      const parsed = JSON.parse(raw);
+      if (!parsed.habits || !Array.isArray(parsed.habits)) {
+        parsed.habits = [
+          { id: "med", name: "Meditation", target: 3 },
+          { id: "read", name: "Reading", target: 5 }
+        ];
+      }
+      if (!parsed.weeks) parsed.weeks = {};
+      return parsed;
+    } catch (e) {
+      return {
+        habits: [
+          { id: "med", name: "Meditation", target: 3 },
+          { id: "read", name: "Reading", target: 5 }
+        ],
+        weeks: {}
+      };
+    }
+  }
 
   return {
     habits: [
@@ -52,6 +75,7 @@ function ensureWeek(db, week, habitId) {
 function render() {
   const db = loadDB();
   const app = document.getElementById("app");
+  if (!app) return;
   app.innerHTML = "";
 
   if (editMode) {
@@ -95,11 +119,11 @@ function renderNormalMode(db, app) {
 
     tr.innerHTML = `
       <td class="habit-name">${habit.name}</td>
-      ${checks.map((v, i) => `
-        <td>
-          <div class="checkbox ${v ? "checked" : ""}"></div>
-        </td>
-      `).join("")}
+      ${checks
+        .map(
+          (v, i) => `<td><div class="checkbox ${v ? "checked" : ""}"></div></td>`
+        )
+        .join("")}
       <td class="counter ${success ? "success" : "pending"}">${count}</td>
       <td class="counter ${prevSuccess ? "success" : "pending"}">${prevCount}</td>
     `;
@@ -142,16 +166,20 @@ function renderEditMode(db, app) {
 
     up.onclick = () => {
       if (index === 0) return;
-      [db.habits[index - 1], db.habits[index]] =
-      [db.habits[index], db.habits[index - 1]];
+      [db.habits[index - 1], db.habits[index]] = [
+        db.habits[index],
+        db.habits[index - 1]
+      ];
       saveDB(db);
       render();
     };
 
     down.onclick = () => {
       if (index === db.habits.length - 1) return;
-      [db.habits[index + 1], db.habits[index]] =
-      [db.habits[index], db.habits[index + 1]];
+      [db.habits[index + 1], db.habits[index]] = [
+        db.habits[index],
+        db.habits[index + 1]
+      ];
       saveDB(db);
       render();
     };
@@ -184,11 +212,12 @@ function renderEditMode(db, app) {
 
 /* ------------------ TOGGLE ------------------ */
 
-document.getElementById("editToggle").onclick = () => {
-  editMode = !editMode;
-  render();
-};
-
-/* ------------------ INIT ------------------ */
-
-render();
+document.addEventListener("DOMContentLoaded", () => {
+  const editBtn = document.getElementById("editToggle");
+  if (editBtn) {
+    editBtn.onclick = () => {
+      editMode = !editMode;
+      render();
+    };
+  }
+});
