@@ -1,0 +1,38 @@
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  background: #111;
+  color: #eee;
+  padding: 16px;
+}
+
+h1 {
+  font-size: 1.4rem;
+  margin-bottom: 24px;
+}
+
+.habit {
+  margin-bottom: 20px;
+}
+
+.name {
+  margin-bottom: 6px;
+}
+
+.boxes span {
+  display: inline-block;
+  width: 22px;
+  height: 22px;
+  margin-right: 6px;
+  border: 1px solid #555;
+  border-radius: 5px;
+}
+
+.boxes span.done {
+  background: #4caf50;
+}
+
+.last-week {
+  margin-left: 6px;
+  font-size: 0.8rem;
+  opacity: 0.6;
+}
