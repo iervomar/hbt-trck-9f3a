@@ -5,34 +5,100 @@ body {
   padding: 16px;
 }
 
-h1 {
-  font-size: 1.4rem;
-  margin-bottom: 24px;
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
 }
 
-.habit {
-  margin-bottom: 20px;
+button {
+  background: #222;
+  color: #eee;
+  border: 1px solid #444;
+  padding: 6px 10px;
+  border-radius: 6px;
 }
 
-.name {
-  margin-bottom: 6px;
+table {
+  width: 100%;
+  border-collapse: collapse;
 }
 
-.boxes span {
-  display: inline-block;
-  width: 22px;
-  height: 22px;
-  margin-right: 6px;
+th, td {
+  text-align: center;
+  padding: 6px;
+}
+
+th {
+  font-size: 0.8rem;
+  opacity: 0.7;
+}
+
+.habit-name {
+  text-align: left;
+  white-space: nowrap;
+}
+
+.checkbox {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
   border: 1px solid #555;
-  border-radius: 5px;
+  margin: auto;
 }
 
-.boxes span.done {
+.checked {
+  background: #666;
+}
+
+.success .checked {
   background: #4caf50;
 }
 
-.last-week {
-  margin-left: 6px;
-  font-size: 0.8rem;
-  opacity: 0.6;
+.pending .checked {
+  background: #fbc02d;
+}
+
+.counter {
+  font-weight: bold;
+}
+
+.counter.success {
+  color: #4caf50;
+}
+
+.counter.pending {
+  color: #fbc02d;
+}
+
+/* EDIT MODE */
+
+.edit-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.edit-row span {
+  flex: 1;
+}
+
+.edit-row input {
+  width: 60px;
+  background: #222;
+  color: #eee;
+  border: 1px solid #444;
+  border-radius: 4px;
+  padding: 4px;
+}
+
+.edit-row button {
+  padding: 4px 8px;
+}
+
+.add-btn {
+  margin-top: 12px;
+  width: 100%;
 }
