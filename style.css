@@ -102,3 +102,42 @@ th {
   margin-top: 12px;
   width: 100%;
 }
+
+/* ---------------- MOBILE STACKED LAYOUT ---------------- */
+@media (max-width: 500px) {
+  table, thead, tbody, th, td, tr {
+    display: block;   /* stack everything vertically */
+  }
+
+  thead {
+    display: none;    /* hide table headers */
+  }
+
+  tr {
+    margin-bottom: 12px;
+    border-bottom: 1px solid #444;
+    padding-bottom: 8px;
+  }
+
+  td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2px 4px;
+  }
+
+  .counter {
+    margin-left: 8px;
+  }
+
+  .habit-name {
+    font-weight: bold;
+    margin-bottom: 4px;
+  }
+
+  .checkbox {
+    width: 16px;
+    height: 16px;
+    margin: 0 2px;
+  }
+}
