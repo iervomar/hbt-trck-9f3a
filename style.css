@@ -138,5 +138,35 @@ th {
     height: 20px;
     margin: 0 2px;
   }
+
+  /* Counters coloring */
+.counters .success {
+  color: #4caf50;
+  font-weight: bold;
+}
+
+.counters .pending {
+  color: #fbc02d;
+  font-weight: bold;
+}
+
+/* Card border coloring */
+.habit-card.success {
+  border-color: #4caf50;
+}
+
+.habit-card.pending {
+  border-color: #fbc02d;
+}
+
+/* Checkbox coloring inside cards */
+.habit-card.success .checkbox.checked {
+  background-color: #4caf50;
+}
+
+.habit-card.pending .checkbox.checked {
+  background-color: #fbc02d;
+}
+
 }
 
