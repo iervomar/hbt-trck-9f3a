@@ -103,41 +103,40 @@ th {
   width: 100%;
 }
 
-/* ---------------- MOBILE STACKED LAYOUT ---------------- */
+/* ---------------- MOBILE HABIT CARDS ---------------- */
 @media (max-width: 500px) {
-  table, thead, tbody, th, td, tr {
-    display: block;   /* stack everything vertically */
-  }
-
-  thead {
-    display: none;    /* hide table headers */
-  }
-
-  tr {
+  .habit-card {
+    border: 1px solid #555;
+    border-radius: 6px;
+    padding: 8px;
     margin-bottom: 12px;
-    border-bottom: 1px solid #444;
-    padding-bottom: 8px;
+    background: #222;
+    color: #eee;
   }
 
-  td {
+  .habit-header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    padding: 2px 4px;
-  }
-
-  .counter {
-    margin-left: 8px;
-  }
-
-  .habit-name {
+    margin-bottom: 6px;
     font-weight: bold;
+  }
+
+  .week-days, .week-checks {
+    display: flex;
+    justify-content: space-between;
     margin-bottom: 4px;
   }
 
-  .checkbox {
-    width: 16px;
-    height: 16px;
+  .week-days span {
+    font-size: 0.8rem;
+    flex: 1;
+    text-align: center;
+  }
+
+  .week-checks .checkbox {
+    width: 20px;
+    height: 20px;
     margin: 0 2px;
   }
 }
+
