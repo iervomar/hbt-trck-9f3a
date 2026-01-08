@@ -86,61 +86,113 @@ function render() {
 }
 
 function renderNormalMode(db, app) {
-  const table = document.createElement("table");
+  const isMobile = window.innerWidth <= 500;
+  app.innerHTML = "";
 
-  // Header
-  const thead = document.createElement("thead");
-  const headerRow = document.createElement("tr");
-  headerRow.innerHTML = `
-    <th></th>
-    ${DAYS.map(d => `<th>${d}</th>`).join("")}
-    <th>This</th>
-    <th>Prev</th>
-  `;
-  thead.appendChild(headerRow);
-  table.appendChild(thead);
+  if (isMobile) {
+    // STACKED MOBILE LAYOUT
+    db.habits.forEach(habit => {
+      ensureWeek(db, currentWeek, habit.id);
 
-  const tbody = document.createElement("tbody");
+      const checks = db.weeks[currentWeek][habit.id];
+      const count = checks.filter(Boolean).length;
+      const success = count >= habit.target;
 
-  db.habits.forEach(habit => {
-    ensureWeek(db, currentWeek, habit.id);
+      const prevChecks = db.weeks[lastWeek]?.[habit.id] || [];
+      const prevTarget = db.weeks[lastWeek]?._targets?.[habit.id];
+      const prevCount = prevChecks.filter(Boolean).length;
+      const prevSuccess = prevTarget && prevCount >= prevTarget;
 
-    const checks = db.weeks[currentWeek][habit.id];
-    const count = checks.filter(Boolean).length;
-    const success = count >= habit.target;
+      const card = document.createElement("div");
+      card.className = "habit-card";
 
-    const prevChecks = db.weeks[lastWeek]?.[habit.id] || [];
-    const prevTarget = db.weeks[lastWeek]?._targets?.[habit.id];
-    const prevCount = prevChecks.filter(Boolean).length;
-    const prevSuccess = prevTarget && prevCount >= prevTarget;
+      card.innerHTML = `
+        <div class="habit-header">
+          <span class="habit-name">${habit.name}</span>
+          <span class="counters">This: ${count}  Prev: ${prevCount}</span>
+        </div>
+        <div class="week-days">
+          ${DAYS.map(d => `<span>${d}</span>`).join("")}
+        </div>
+        <div class="week-checks">
+          ${checks
+            .map(
+              (v, i) =>
+                `<div class="checkbox ${v ? "checked" : ""}" data-index="${i}"></div>`
+            )
+            .join("")}
+        </div>
+      `;
 
-    const tr = document.createElement("tr");
-    tr.className = success ? "success" : "pending";
+      // attach checkbox click events
+      card.querySelectorAll(".checkbox").forEach(box => {
+        const i = +box.dataset.index;
+        box.onclick = () => {
+          checks[i] = !checks[i];
+          saveDB(db);
+          render();
+        };
+      });
 
-    tr.innerHTML = `
-      <td class="habit-name">${habit.name}</td>
-      ${checks
-        .map(
-          (v, i) => `<td><div class="checkbox ${v ? "checked" : ""}"></div></td>`
-        )
-        .join("")}
-      <td class="counter ${success ? "success" : "pending"}">${count}</td>
-      <td class="counter ${prevSuccess ? "success" : "pending"}">${prevCount}</td>
+      app.appendChild(card);
+    });
+  } else {
+    // STANDARD TABLE LAYOUT
+    const table = document.createElement("table");
+
+    const thead = document.createElement("thead");
+    const headerRow = document.createElement("tr");
+    headerRow.innerHTML = `
+      <th></th>
+      ${DAYS.map(d => `<th>${d}</th>`).join("")}
+      <th>This</th>
+      <th>Prev</th>
     `;
+    thead.appendChild(headerRow);
+    table.appendChild(thead);
 
-    tr.querySelectorAll(".checkbox").forEach((box, i) => {
-      box.onclick = () => {
-        checks[i] = !checks[i];
-        saveDB(db);
-        render();
-      };
+    const tbody = document.createElement("tbody");
+
+    db.habits.forEach(habit => {
+      ensureWeek(db, currentWeek, habit.id);
+
+      const checks = db.weeks[currentWeek][habit.id];
+      const count = checks.filter(Boolean).length;
+      const success = count >= habit.target;
+
+      const prevChecks = db.weeks[lastWeek]?.[habit.id] || [];
+      const prevTarget = db.weeks[lastWeek]?._targets?.[habit.id];
+      const prevCount = prevChecks.filter(Boolean).length;
+      const prevSuccess = prevTarget && prevCount >= prevTarget;
+
+      const tr = document.createElement("tr");
+      tr.className = success ? "success" : "pending";
+
+      tr.innerHTML = `
+        <td class="habit-name">${habit.name}</td>
+        ${checks
+          .map(
+            (v, i) => `<td><div class="checkbox ${v ? "checked" : ""}"></div></td>`
+          )
+          .join("")}
+        <td class="counter ${success ? "success" : "pending"}">${count}</td>
+        <td class="counter ${prevSuccess ? "success" : "pending"}">${prevCount}</td>
+      `;
+
+      tr.querySelectorAll(".checkbox").forEach((box, i) => {
+        box.onclick = () => {
+          checks[i] = !checks[i];
+          saveDB(db);
+          render();
+        };
+      });
+
+      tbody.appendChild(tr);
     });
 
-    tbody.appendChild(tr);
-  });
-
-  table.appendChild(tbody);
-  app.appendChild(table);
+    table.appendChild(tbody);
+    app.appendChild(table);
+  }
 }
 
 function renderEditMode(db, app) {
