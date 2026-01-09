@@ -140,33 +140,58 @@ th {
   }
 
   /* Counters coloring */
-.counters .success {
-  color: #4caf50;
-  font-weight: bold;
-}
+  .counters {
+    display: flex;
+    gap: 12px; /* space between This / Prev */
+  }
 
-.counters .pending {
-  color: #fbc02d;
-  font-weight: bold;
-}
+  .counter {
+    font-weight: bold;
+  }
+  
+  .counter.idle {
+    color: #888;
+  }
+  
+  .counter.partial {
+    color: #fbc02d;
+  }
+  
+  .counter.success {
+    color: #4caf50;
+  }
+
 
 /* Card border coloring */
-.habit-card.success {
-  border-color: #4caf50;
-}
-
-.habit-card.pending {
-  border-color: #fbc02d;
-}
+  .habit-card.idle {
+    border-color: #555;
+  }
+  
+  .habit-card.partial {
+    border-color: #fbc02d;
+  }
+  
+  .habit-card.success {
+    border-color: #4caf50;
+  }
 
 /* Checkbox coloring inside cards */
-.habit-card.success .checkbox.checked {
-  background-color: #4caf50;
-}
+  .checkbox {
+    background: transparent;
+  }
+  
+  .checkbox.checked.idle {
+    background: #666;
+  }
+  
+  .checkbox.checked.partial {
+    background: #fbc02d;
+  }
+  
+  .checkbox.checked.success {
+    background: #4caf50;
+  }
 
-.habit-card.pending .checkbox.checked {
-  background-color: #fbc02d;
-}
 
 }
 
