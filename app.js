@@ -85,6 +85,12 @@ function render() {
   }
 }
 
+function habitState(count, target) {
+  if (count === 0) return "idle";
+  if (count >= target) return "success";
+  return "partial";
+}
+
 function renderNormalMode(db, app) {
   const isMobile = window.innerWidth <= 500;
   app.innerHTML = "";
@@ -96,22 +102,23 @@ db.habits.forEach(habit => {
 
   const checks = db.weeks[currentWeek][habit.id];
   const count = checks.filter(Boolean).length;
-  const success = count >= habit.target;
+  const state = habitState(count, habit.target);
 
   const prevChecks = db.weeks[lastWeek]?.[habit.id] || [];
   const prevTarget = db.weeks[lastWeek]?._targets?.[habit.id];
   const prevCount = prevChecks.filter(Boolean).length;
-  const prevSuccess = prevTarget && prevCount >= prevTarget;
+  const prevState =
+    prevTarget == null ? "idle" : habitState(prevCount, prevTarget);
 
   const card = document.createElement("div");
-  card.className = `habit-card ${success ? "success" : "pending"}`; // <-- add success/pending
+  card.className = `habit-card ${state}`;
 
   card.innerHTML = `
     <div class="habit-header">
       <span class="habit-name">${habit.name}</span>
       <span class="counters">
-        <span class="${success ? "success" : "pending"}">This: ${count}</span>
-        <span class="${prevSuccess ? "success" : "pending"}">Prev: ${prevCount}</span>
+        <span class="counter ${state}">This: ${count}</span>
+        <span class="counter ${prevState} prev">Prev: ${prevCount}</span>
       </span>
     </div>
     <div class="week-days">
@@ -121,9 +128,7 @@ db.habits.forEach(habit => {
       ${checks
         .map(
           (v, i) =>
-            `<div class="checkbox ${v ? "checked" : ""} ${
-              success ? "success" : "pending"
-            }" data-index="${i}"></div>`
+            `<div class="checkbox ${v ? "checked" : ""} ${state}" data-index="${i}"></div>`
         )
         .join("")}
     </div>
