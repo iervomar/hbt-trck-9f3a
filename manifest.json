@@ -1,10 +1,10 @@
 {
   "name": "Habit Tracker",
-  "short_name": "Tracker",
+  "short_name": "HT",
   "start_url": ".",
   "display": "standalone",
   "background_color": "#111111",
-  "theme_color": "#111111"
+  "theme_color": "#222222"
   "icons": [
     {
       "src": "ht_192.png",
